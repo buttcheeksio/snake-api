@@ -49,14 +49,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // fetch that specific URL
     const gameContainer = document.querySelector('#gameContainer')
-    const scoreContainer = document.querySelector('#score')
-
+    const scoreContainer = document.querySelector('#scoreContainer')
+    const highScoreContainer = document.querySelector('#highScoreContainer')
     const gamesList = document.querySelector('#gameContainer ul')
+    const userInputContainer = document.querySelector('#userInputContainer')
+    const finalScore = document.querySelector('#userInputContainer h1')
+    const userNameInput = document.querySelector('#userInputContainer input')
+
+
+    let allGames = []
 
     fetch(gamesURL)
       .then( response => response.json())
       .then( gamesData => {
         gamesData.forEach (game => {
+          allGames.push(game)
           gamesList.innerHTML += renderOneGame(game)
         })
       }) // end of the fetch(gamesURL)
@@ -67,18 +74,62 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     /** EVENT LISTENER FOR THE CLICK TO START THE GAME **/
-    gameContainer.addEventListener('click', function(event) {
-      if (event.target.tagName === "BUTTON") {
+    function buttonToStartGame() {
+
+      gameContainer.addEventListener('click', function(event) {
+      if (event.target.id === "startGame") {
+        console.log(GAME_SPEED)
+        console.log(dx, dy)
+
+        snake = [
+          {x: 150, y: 150},
+          {x: 140, y: 150},
+          {x: 130, y: 150},
+          {x: 120, y: 150},
+          {x: 110, y: 150}
+        ]
+
+        score = 0;
+        changingDirection = false;
+        foodX;
+        foodY;
+        dx = 10;
+        dy = 0;
+
+        // gamesList.style.display = "block"
+        highScoreContainer.style.display = "none"
+        userInputContainer.style.display = "none"
         gameCanvas.style.display = "block"
         scoreContainer.style.display = "block"
 
           main();
           createFood();
       }
-    }) // end of EVENT LISTENER FOR THE CLICK TO START THE GAME
+    })
+  }// end of EVENT LISTENER FOR THE CLICK TO START THE GAME
+  buttonToStartGame()
 
-
-
+  userInputContainer.addEventListener('click', (event) => {
+    if (event.target.id === 'nameInputButton') {
+      fetch(gamesURL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({
+          user: userNameInput.value,
+          score: score
+        }) //end of body
+      }) // end of fetch
+      .then(response => response.json())
+      .then(obj => {
+        userInputContainer.style.display = "none"
+        gamesList.innerHTML += renderOneGame(obj)
+        highScoreContainer.style.display = "block"
+      })
+    } //end of IF statement
+  }) // end of user input event listener
 
 
     // everything under here occurs after button press of "Start Game" or something
@@ -94,7 +145,15 @@ document.addEventListener('DOMContentLoaded', function() {
      */
     function main() {
       // If the game ended return early to stop game
-      if (didGameEnd()) return;
+      if (didGameEnd()) {
+
+        gameCanvas.style.display = "none"
+        userInputContainer.style.display = "block"
+        scoreContainer.style.display = "none"
+        finalScore.innerText = score
+
+        // gamesList.innerHTML += renderOneGame
+      } else {
 
       setTimeout(function onTick() {
         changingDirection = false;
@@ -106,6 +165,9 @@ document.addEventListener('DOMContentLoaded', function() {
         main();
       }, GAME_SPEED)
     }
+    }
+
+
     /**
      * Change the background colour of the canvas to CANVAS_BACKGROUND_COLOR and
      * draw a border around it
@@ -144,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Increase score
         score += 10;
         // Display score on screen
-        document.getElementById('score').innerHTML = score;
+        scoreContainer.innerHTML = score;
         // Generate new food location
         createFood();
       } else {

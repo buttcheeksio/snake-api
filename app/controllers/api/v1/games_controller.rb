@@ -14,6 +14,12 @@ class Api::V1::GamesController < ApplicationController
     end
   end
 
+  def create
+    @game = Game.create(game_params)
+
+    render json: @game, status: :created
+  end
+
   private
 
   def game_params
