@@ -35,6 +35,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // returns a two-dimensional drawing context
     const ctx = gameCanvas.getContext("2d");
     let mySound = []
+    let keys = []
 
 ////////////////////// END OF CONSTANTS ////////////////////////
 
@@ -46,19 +47,32 @@ document.addEventListener('DOMContentLoaded', function() {
       {x: 120, y: 150},
       {x: 110, y: 150}
     ]
-    
+
+    let snake2 = [
+      {x: 150, y: 150},
+      {x: 140, y: 150},
+      {x: 130, y: 150},
+      {x: 120, y: 150},
+      {x: 110, y: 150}
+    ]
     // The user's score
     let score = 0;
+    let score2 = 0
     // When set to true the snake is changing direction
     let changingDirection = false;
+    let changingDirection2 = false;
     // Food x-coordinate
     let foodX;
+    let foodX2;
     // Food y-coordinate
     let foodY;
+    let foodY2
     // Horizontal velocity
     let dx = 10;
+    let dx2 = 10
     // Vertical velocity
     let dy = 0;
+    let dy2 = 0;
 ////////////////////// END OF SNAKE LETS ////////////////////////
 
 ////////////////////// INITIAL GAME FETCH ////////////////////////
@@ -103,7 +117,7 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(obj => {
         if (obj.weather[0].main === 'Clouds') {
           document.body.style.backgroundImage = `url(${cloudsURL})`
-        } else if (obj.weather[0].main === 'Haze') {
+        } else if (obj.weather[0].main === 'Mist') {
             document.body.style.backgroundImage = `url(${hazeyURL})`
         }
       })
@@ -140,12 +154,52 @@ document.addEventListener('DOMContentLoaded', function() {
 
           main();
           createFood();
+      } else if (event.target.id === "startGame2") {
+
+        snake = [
+          {x: 40, y: 0},
+          {x: 30, y: 0},
+          {x: 20, y: 0},
+          {x: 10, y: 0},
+          {x: 0, y: 0}
+        ]
+
+        snake2 = [
+          {x: 250, y: 290},
+          {x: 260, y: 290},
+          {x: 270, y: 290},
+          {x: 280, y: 290},
+          {x: 290, y: 290}
+        ]
+
+        score = 0;
+        score2 = 0
+
+        changingDirection = false;
+        changingDirection2 = false
+
+        foodX;
+        foodY;
+        dx = 10;
+        dy = 0;
+        dx2 = -10;
+        dy2 = 0;
+
+        // gamesList.style.display = "block"
+        highScoreContainer.style.display = "none"
+        userInputContainer.style.display = "none"
+        gameCanvas.style.display = "block"
+        scoreContainer.style.display = "block"
+
+          main2();
+          createFood();
       }
     })
   }// end of EVENT LISTENER FOR THE CLICK TO START THE GAME
   buttonToStartGame()
 
   userInputContainer.addEventListener('click', (event) => {
+    console.log(event.keyCode)
     if (event.target.id === 'nameInputButton') {
       fetch(gamesURL, {
         method: 'POST',
@@ -186,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Create the first food location
 
     // Call changeDirection whenever a key is pressed
-    document.addEventListener("keydown", changeDirection);
+
     /**
      * Main function of the game
      * called repeatedly to advance the game
@@ -210,6 +264,32 @@ document.addEventListener('DOMContentLoaded', function() {
           drawSnake();
           // Call game again
           main();
+        }, GAME_SPEED)
+      }
+    }
+
+    function main2() {
+      // If the game ended return early to stop game
+      if (didGameEnd()) {
+
+        gameCanvas.style.display = "none"
+        userInputContainer.style.display = "block"
+        scoreContainer.style.display = "none"
+        finalScore.innerText = score
+
+      } else {
+
+        setTimeout(function onTick() {
+          changingDirection = false;
+          changingDirection2 = false;
+          clearCanvas();
+          drawFood();
+          advanceSnake();
+          advanceSnake2();
+          drawSnake();
+          drawSnake2();
+          // Call game again
+          main2();
         }, GAME_SPEED)
       }
     }
@@ -268,21 +348,62 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
 
+    function advanceSnake2() {
+      // Create the new Snake's head
+      const head = {x: snake2[0].x + dx2, y: snake2[0].y + dy2};
+      // Add the new head to the beginning of snake body
+      snake2.unshift(head);
+      const didEatFood = snake2[0].x === foodX2 && snake2[0].y === foodY2;
+      if (didEatFood) {
+        // Play Quack
+        mySound.play();
+        // Increase score
+        score2 += 10;
+        // Display score on screen
+        scoreContainer.innerHTML = `
+        <h2><u>Score</u></h2>
+        <p>${score}</p>
+        `
+        scoreContainer2.innerHTML = `
+        <h2><u>Score</u></h2>
+        <p>${score2}</p>
+        `
+        // Generate new food location
+        createFood();
+      } else {
+        // Remove the last part of snake body
+        snake2.pop();
+      }
+    }
 
-    /**
-     * Returns true if the head of the snake touched another part of the game
-     * or any of the walls
-     */
+
+////////////////// didGameEnd() ////////////////////////
+/**
+ * Returns true if the head of the snake touched another part of the game
+ * or any of the walls
+ */
     function didGameEnd() {
       for (let i = 4; i < snake.length; i++) {
-        if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) return true
+        if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
+          return true
+        }
       }
-      const hitLeftWall = snake[0].x < 0;
-      const hitRightWall = snake[0].x > gameCanvas.width - 10;
-      const hitBottomWall = snake[0].y < 0;
-      const hitTopWall = snake[0].y > gameCanvas.height - 10;
+
+      for (let i = 4; i < snake2.length; i++) {
+        if (snake2[i].x === snake2[0].x && snake2[i].y === snake2[0].y) {
+          return true
+        }
+      }
+
+      const hitLeftWall = snake[0].x < 0 || snake2[0].x < 0
+      const hitRightWall = snake[0].x > gameCanvas.width - 10 || snake2[0].x > gameCanvas.width - 10;
+      const hitBottomWall = snake[0].y < 0 || snake2[0].y < 0;
+      const hitTopWall = snake[0].y > gameCanvas.height - 10 || snake2[0].y > gameCanvas.height - 10;
+
       return hitLeftWall || hitRightWall || hitTopWall || hitBottomWall
-    }
+  } // end of didGameEnd()
+////////////////// didGameEnd() ////////////////////////
+
 
 
     /**
@@ -332,6 +453,23 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     }
 
+    function drawSnake2() {
+      snake2.forEach(drawSnakePart2)
+    }
+
+    /**
+     * Draws a part of the snake on the canvas
+     * @param { object } snakePart - The coordinates where the part should be drawn
+     */
+    function drawSnakePart2(snakePart2) {
+
+      if (snakePart2 === snake2[0]) {
+        ctx.drawImage(headImage, snakePart2.x, snakePart2.y, 10, 10)
+      } else {
+        ctx.drawImage(duckImage, snakePart2.x, snakePart2.y, 10, 10)
+      }
+    }
+
     /**
      * Changes the vertical and horizontal velocity of the snake according to the
      * key that was pressed.
@@ -341,12 +479,24 @@ document.addEventListener('DOMContentLoaded', function() {
      * @param { object } event - The keydown event
      */
 
+     ///NEED TO WRITE DIDGAMEEND2
+     ///NEED TO CREATE CHANGE DIRECTION AND KEY DOWN EVENT LISTENER FOR PLAYER 2///
+
+
+     document.body.addEventListener("keydown", changeDirection);
+     document.body.addEventListener("keydown", changeDirection2);
+     document.body.addEventListener("keyup", function (e) {
+       // console.log("inside eventListener", keys)
+       keys[e.keyCode] = false;
+     });
+
 
     function changeDirection(event) {
       const LEFT_KEY = 37;
       const RIGHT_KEY = 39;
       const UP_KEY = 38;
       const DOWN_KEY = 40;
+      keys[event.keyCode] = true;
       /**
        * Prevent the snake from reversing
        * Example scenario:
@@ -356,31 +506,168 @@ document.addEventListener('DOMContentLoaded', function() {
       if (changingDirection) return;
       changingDirection = true;
 
-      const keyPressed = event.keyCode;
+      // const keyPressed = event.keyCode;
       const goingUp = dy === -10;
       const goingDown = dy === 10;
       const goingRight = dx === 10;
       const goingLeft = dx === -10;
-      if (keyPressed === LEFT_KEY && !goingRight) {
+
+      if (keys[LEFT_KEY] && !goingRight) {
         dx = -10;
         dy = 0;
       }
 
-      if (keyPressed === UP_KEY && !goingDown) {
+      if (keys[UP_KEY] && !goingDown) {
         dx = 0;
         dy = -10;
       }
 
-      if (keyPressed === RIGHT_KEY && !goingLeft) {
+      if (keys[RIGHT_KEY] && !goingLeft) {
         dx = 10;
         dy = 0;
       }
 
-      if (keyPressed === DOWN_KEY && !goingUp) {
+      if (keys[DOWN_KEY] && !goingUp) {
         dx = 0;
         dy = 10;
       }
-    }
+    } // end of changeDirection()
+
+    function changeDirection2(event) {
+      const LEFT_KEY = 65;
+      const RIGHT_KEY = 68;
+      const UP_KEY = 87;
+      const DOWN_KEY = 83;
+      keys[event.keyCode] = true;
+      /**
+       * Prevent the snake from reversing
+       * Example scenario:
+       * Snake is moving to the right. User presses down and immediately left
+       * and the snake immediately changes direction without taking a step down first
+       */
+      if (changingDirection2) return;
+      changingDirection2 = true;
+      // console.log("inside changeDirection2", keys)
+
+      // const keyPressed2 = event.keyCode;
+      const goingUp2 = dy2 === -10;
+      const goingDown2 = dy2 === 10;
+      const goingRight2 = dx2 === 10;
+      const goingLeft2 = dx2 === -10;
+      if (keys[LEFT_KEY] && !goingRight2) {
+        dx2 = -10;
+        dy2 = 0;
+      }
+
+      if (keys[UP_KEY] && !goingDown2) {
+        dx2 = 0;
+        dy2 = -10;
+      }
+
+      if (keys[RIGHT_KEY] && !goingLeft2) {
+        dx2 = 10;
+        dy2 = 0;
+      }
+
+      if (keys[DOWN_KEY] && !goingUp2) {
+        dx2 = 0;
+        dy2 = 10;
+      }
+
+    } // end of changeDirection()
+
+
+    // document.body.addEventListener("keydown", function (e) {
+    //   keys[e.keyCode] = true;
+    //
+    // });
+
+
+
+
+
+
+    //
+    //
+    // function update() {
+    //
+    //   if (keys[38]) {
+    //       if (snake.velY > -speed) {
+    //           snake.velY--;
+    //       }
+    //   }
+    //
+    //   if (keys[40]) {
+    //       if (snake.velY < speed) {
+    //           snake.velY++;
+    //       }
+    //   }
+    //   if (keys[39]) {
+    //       if (snake.velX < speed) {
+    //           snake.velX++;
+    //       }
+    //   }
+    //   if (keys[37]) {
+    //       if (snake.velX > -speed) {
+    //           snake.velX--;
+    //       }
+    //   }
+    //
+    //   if (keys[87]) {
+    //       if (snake2.velY > -speed) {
+    //           snake2.velY--;
+    //       }
+    //   }
+    //
+    //   if (keys[83]) {
+    //       if (snake2.velY < speed) {
+    //           snake2.velY++;
+    //       }
+    //   }
+    //   if (keys[68]) {
+    //       if (snake2.velX < speed) {
+    //           snake2.velX++;
+    //       }
+    //   }
+    //   if (keys[65]) {
+    //       if (snake2.velX > -speed) {
+    //           snake2.velX--;
+    //       }
+    //   }
+    //   ctx.clearRect(0, 0, 300, 300);
+    //   updatePlayer(snake);
+    //   updatePlayer(snake2);
+    //   setTimeout(update, 10);
+    // } // end of update()
+    //
+    // function updatePlayer(player) {
+    //   player.velY *= friction;
+    //   player.y += player.velY;
+    //   player.velX *= friction;
+    //   player.x += player.velX;
+    //
+    //   if (player.x >= 295) {
+    //       player.x = 295;
+    //   } else if (player.x <= 5) {
+    //       player.x = 5;
+    //   }
+    //
+    //   if (player.y > 295) {
+    //       player.y = 295;
+    //   } else if (player.y <= 5) {
+    //       player.y = 5;
+    //   }
+    //
+    //   ctx.fillStyle = player.color;
+    //   ctx.beginPath();
+    //   ctx.arc(player.x, player.y, 5, 0, Math.PI * 2);
+    //   ctx.fill();
+    // } // end of updatePlayer(player)
+    //
+    // update()
+
+
+
 
 ////////////////////////// SOUNDS //////////////////////////
   // new object constructor to handle sound objects
