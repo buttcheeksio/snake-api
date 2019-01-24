@@ -9,6 +9,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const FOOD_BORDER_COLOR = 'darkred';
 
     const gamesURL = 'http://localhost:3000/api/v1/games'
+    const weatherURL = 'http://api.openweathermap.org/data/2.5/weather?q=London,uk&APPID=dadc8345526b5cb33c413493ea7bf56f'
+    const cloudsURL = 'http://freebigpictures.com/wp-content/uploads/cloud.jpg'
+    const hazeyURL = 'https://wallpaperplay.com/walls/full/1/8/6/215620.jpg'
+    const snowURL = `https://cdn.pixabay.com/photo/2016/03/12/23/25/landscape-1253032_960_720.jpg`
+    const rubberDuckWithSunglass = `https://art.pixilart.com/ca050e04650ceaf.png`
+    const rubberDuckWithBow = `https://art.pixilart.com/b365c1e88ecf6ca.png`
+    const rubberDuckWithBriefcase = `https://art.pixilart.com/6e7d81bf4d728ce.png`
+    const rubberDuckPlain = `https://art.pixilart.com/32f43ba45fa2e05.png`
+    const flockyLogo = `https://fontmeme.com/permalink/190123/8a5c9ae5518ede9ae135238333c6e120.png`
+
+    const gameContainer = document.querySelector('#gameContainer')
+    const scoreContainer = document.querySelector('#scoreContainer')
+    const highScoreContainer = document.querySelector('#highScoreContainer')
+    const gamesList = document.querySelector('#gameContainer table')
+    const userInputContainer = document.querySelector('#userInputContainer')
+    const finalScore = document.querySelector('#userInputContainer h1')
+    const userNameInput = document.querySelector('#userInputContainer input')
+    const scoresData = document.querySelector('#scoresData')
 
     let snake = [
       {x: 150, y: 150},
@@ -48,30 +66,50 @@ document.addEventListener('DOMContentLoaded', function() {
       // hit button to remove current display and pull in canvas
 
     // fetch that specific URL
-    const gameContainer = document.querySelector('#gameContainer')
-    const scoreContainer = document.querySelector('#scoreContainer')
-    const highScoreContainer = document.querySelector('#highScoreContainer')
-    const gamesList = document.querySelector('#gameContainer ul')
-    const userInputContainer = document.querySelector('#userInputContainer')
-    const finalScore = document.querySelector('#userInputContainer h1')
-    const userNameInput = document.querySelector('#userInputContainer input')
 
 
-    let allGames = []
+    allGames = []
 
     fetch(gamesURL)
       .then( response => response.json())
       .then( gamesData => {
         gamesData.forEach (game => {
           allGames.push(game)
-          gamesList.innerHTML += renderOneGame(game)
+          allGames.sort((a,b) => b.score - a.score)
         })
+        allGames.splice(8)
+
+        renderAllGames(allGames)
       }) // end of the fetch(gamesURL)
 
-    function renderOneGame(game) {
-      return `<li>${game.user} - ${game.score}</li>`
-    }
+      function renderAllGames(games) {
+        i = 1
+        games.forEach (game => {
+          scoresData.innerHTML += renderOneGame(game)
+        })
+      }
 
+      function renderOneGame(game) {
+
+        return `
+        <tr>
+        <td> ${i++} </td>
+        <td> ${game.user} </td>
+        <td> ${game.score} </td>
+        </tr>
+        `
+      }
+
+    //WEATHER API Call
+    fetch(weatherURL)
+      .then(response => response.json())
+      .then(obj => {
+        if (obj.weather[0].main === 'Clouds') {
+          document.body.style.backgroundImage = `url(${cloudsURL})`
+        } else if (obj.weather[0].main === 'Haze') {
+            document.body.style.backgroundImage = `url(${hazeyURL})`
+        }
+      })
 
     /** EVENT LISTENER FOR THE CLICK TO START THE GAME **/
     function buttonToStartGame() {
@@ -123,14 +161,26 @@ document.addEventListener('DOMContentLoaded', function() {
         }) //end of body
       }) // end of fetch
       .then(response => response.json())
-      .then(obj => {
+      .then(game => {
         userInputContainer.style.display = "none"
-        gamesList.innerHTML += renderOneGame(obj)
+
+        allGames.push(game)
+        allGames.sort((a,b) => b.score - a.score)
+        allGames.splice(8)
+        // gamesList.innerHTML += renderOneGame(obj)
+
+        scoresData.innerHTML = `
+          <tr>
+            <th><h3><u> RANK </u></h3></th>
+            <th><h3><u> PLAYER </u></h3></th>
+            <th><h3><u> SCORE </u></h3></th>
+          </tr>
+        `
         highScoreContainer.style.display = "block"
+        renderAllGames(allGames)
       })
     } //end of IF statement
   }) // end of user input event listener
-
 
     // everything under here occurs after button press of "Start Game" or something
     // Start game
@@ -172,6 +222,10 @@ document.addEventListener('DOMContentLoaded', function() {
      * Change the background colour of the canvas to CANVAS_BACKGROUND_COLOR and
      * draw a border around it
      */
+
+
+
+
     function clearCanvas() {
       //  Select the colour to fill the drawing
       ctx.fillStyle = CANVAS_BACKGROUND_COLOR;
@@ -320,4 +374,5 @@ document.addEventListener('DOMContentLoaded', function() {
         dy = 10;
       }
     }
+
 }) // end of DOMContentLoaded
