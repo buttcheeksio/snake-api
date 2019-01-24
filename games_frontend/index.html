@@ -6,14 +6,17 @@
 
   <body>
     <img id="icon" src='https://art.pixilart.com/ca050e04650ceaf.png' width="120" height="120">
-    <img id="logoText" class="shimmer" src='https://fontmeme.com/permalink/190123/8a5c9ae5518ede9ae135238333c6e120.png' >
+    <img id="logoText" class="shimmer" src='https://fontmeme.com/permalink/190123/8a5c9ae5518ede9ae135238333c6e120.png'>
 
+    <img id="duck" src='/Users/johnmartinez/dev/js/api-test/snake-api/app/images/rubberDuckPlain.png' height=0 width=0>
 
-    <div id="scoreContainer">0</div>
-    <div id="enterYourName">
-
-
+    <div id="scoreContainer">
+      <b><h2><u>Score</u></h2>
+      <h3>0</h3></b>
     </div>
+
+    <div id="enterYourName"></div>
+
     <div id="gameContainer">
       <div id="highScoreContainer">
         <h1>LEADERBOARD</h1>
@@ -34,14 +37,8 @@
         <button id="nameInputButton">Submit</button>
       </div>
 
-      <canvas id="gameCanvas" width="500" height="400"><canvas>
-
+      <canvas id="gameCanvas" width="300" height="300"><canvas>
     </div>
-
-    <button id="sound">click for quack</button>
-
-
-
 
     <style>
 
@@ -52,6 +49,13 @@
         margin-left: -220px;
         margin-top: -10px;
         -webkit-animation: rotation 2s infinite linear;
+      }
+
+      #logoText {
+        position: fixed;
+        left: 55%;
+        margin-left: -160px;
+        margin-top: 25px;
       }
 
       @-webkit-keyframes rotation {
@@ -65,13 +69,6 @@
 
       body {
         background-size: 100%;
-      }
-
-      #logoText {
-        position: fixed;
-        left: 55%;
-        margin-left: -160px;
-        margin-top: 25px;
       }
 
       #userInputContainer {
@@ -105,9 +102,13 @@
       #scoreContainer {
         display: none;
         text-align: center;
-        font-size: 140px;
-        font-family: 'Antic Slab', serif;
+        margin-left: -500px;
+        margin-top: 280px;
+
+        font-size: 20px;
+        font-family: 'Play', sans-serif;
       }
+
 
       #gameContainer {
         font-family: 'Play', sans-serif;
