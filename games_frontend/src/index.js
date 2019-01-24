@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
 
+////////////////////// CONSTANTS ////////////////////////
     const GAME_SPEED = 150;
     const CANVAS_BORDER_COLOR = 'black';
     const CANVAS_BACKGROUND_COLOR = "white";
@@ -27,7 +28,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const finalScore = document.querySelector('#userInputContainer h1')
     const userNameInput = document.querySelector('#userInputContainer input')
     const scoresData = document.querySelector('#scoresData')
+    const gameCanvas = document.getElementById("gameCanvas")
 
+    // returns a two-dimensional drawing context
+    const ctx = gameCanvas.getContext("2d");
+    let mySound = []
+
+////////////////////// END OF CONSTANTS ////////////////////////
+
+////////////////////// SNAKE LETS ////////////////////////
     let snake = [
       {x: 150, y: 150},
       {x: 140, y: 150},
@@ -47,27 +56,9 @@ document.addEventListener('DOMContentLoaded', function() {
     let dx = 10;
     // Vertical velocity
     let dy = 0;
-    // Get the canvas element
-    const gameCanvas = document.getElementById("gameCanvas");
-    // Return a two dimensional drawing context
-    const ctx = gameCanvas.getContext("2d");
+////////////////////// END OF SNAKE LETS ////////////////////////
 
-    // Return a two dimensional drawing context for Menu
-    // const menuCtx = menuCanvas.getContext("2d")
-
-    // menu??
-    // leaderboard()
-    // function leaderboard() {
-      //   menuCtx.fillStyle = CANVAS_BACKGROUND_COLOR
-      //   menuCtx.strokestyle = CANVAS_BORDER_COLOR
-      // }
-      // fetch for all the information
-      // display all the information on the screen in a list format
-      // hit button to remove current display and pull in canvas
-
-    // fetch that specific URL
-
-
+////////////////////// INITIAL GAME FETCH ////////////////////////
     allGames = []
 
     fetch(gamesURL)
@@ -81,6 +72,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         renderAllGames(allGames)
       }) // end of the fetch(gamesURL)
+
+////////////////////// END OF INITIAL GAME FETCH ////////////////////////
 
       function renderAllGames(games) {
         i = 1
@@ -100,6 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
         `
       }
 
+////////////////////////// WEATHER FETCH //////////////////////////
     //WEATHER API Call
     fetch(weatherURL)
       .then(response => response.json())
@@ -110,6 +104,8 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.style.backgroundImage = `url(${hazeyURL})`
         }
       })
+///////////////////////// END OF WEATHER FETCH //////////////////////
+
 
     /** EVENT LISTENER FOR THE CLICK TO START THE GAME **/
     function buttonToStartGame() {
@@ -182,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function() {
     } //end of IF statement
   }) // end of user input event listener
 
-    // everything under here occurs after button press of "Start Game" or something
+// everything under here occurs after button press of "Start Game" or something
     // Start game
 
     // Create the first food location
@@ -204,6 +200,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // gamesList.innerHTML += renderOneGame
       } else {
+
+
 
       setTimeout(function onTick() {
         changingDirection = false;
@@ -257,6 +255,8 @@ document.addEventListener('DOMContentLoaded', function() {
       snake.unshift(head);
       const didEatFood = snake[0].x === foodX && snake[0].y === foodY;
       if (didEatFood) {
+        // Play Quack
+        mySound.play();
         // Increase score
         score += 10;
         // Display score on screen
@@ -374,5 +374,31 @@ document.addEventListener('DOMContentLoaded', function() {
         dy = 10;
       }
     }
+
+////////////////////////// SOUNDS //////////////////////////
+  // new object constructor to handle sound objects
+  function sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function(){
+      this.sound.play();
+    }
+    this.stop = function(){
+      this.sound.pause();
+    }
+  }
+
+  mySound = new sound("/Users/johnmartinez/dev/js/api-test/snake-api/app/images/quack.mp3");
+
+  const buttonForQuack = document.querySelector('#sound')
+  buttonForQuack.addEventListener('click', function(event) {
+    mySound.play();
+  })
+
+////////////////////////// END OF SOUNDS //////////////////////////
 
 }) // end of DOMContentLoaded
