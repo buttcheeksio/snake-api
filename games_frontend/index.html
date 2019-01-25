@@ -6,18 +6,29 @@
 
   <body>
     <img id="icon" src='https://art.pixilart.com/ca050e04650ceaf.png' width="120" height="120">
-    <img id="logoText" class="shimmer" src='https://fontmeme.com/permalink/190123/8a5c9ae5518ede9ae135238333c6e120.png'>
+    <img id="logoText" class="show-off shiny" src='https://fontmeme.com/permalink/190123/8a5c9ae5518ede9ae135238333c6e120.png'>
 
     <img id="duck" src='/Users/johnmartinez/dev/js/api-test/snake-api/app/images/rubberDuckPlain.png' height=0 width=0>
+    <img id="duck2" src='/Users/johnmartinez/dev/js/api-test/snake-api/app/images/rubberDuckPlainPNG.png' height=0 width=0>
+    <img id="foodDuck" src='/Users/johnmartinez/dev/js/api-test/snake-api/app/images/rubberDuckPlainPink.png' height=0 width=0>
 
-    <div id="scoreContainer">
-      <b><h2><u>Score</u></h2>
-      <h3>0</h3></b>
+
+    <div id="scores">
+      <div id="scoreContainer" class="left">
+        <b><p><u>Score</u></p>
+        <p>0</p></b>
+      </div>
+      <!-- <div id="scoreContainer2" class="right">
+        <b><p><u>Player 2 Score</u></p>
+        <p>0</p></b> -->
+      <!-- </div> -->
     </div>
-    <div id="scoreContainer2">
-      <b><h2><u>Score</u></h2>
-      <h3>0</h3></b>
-    </div>
+
+    <!-- <div id="speedView">
+      Current Speed: Normal (score multiplier: 1.0)
+    </div> -->
+
+    <div id="getReady">Get Ready!</div>
 
     <div id="enterYourName"></div>
 
@@ -35,18 +46,48 @@
         <button id="startGame2">2 Player Game</button>
       </div>
 
+      <!-- <div id="difficulty">
+        <button id="slow">Slow</button>
+        <button id="normal">Normal</button>
+        <button id="fast">Fast</button>
+      </div> -->
+      <div id="difficulty-text">
+        <b>Difficulty Level:</b>
+        <select id="difficulty">
+          <option value="slow">Slow (score multiplier: 0.70)</option>
+          <option selected="selected" value="normal">Normal (score multiplier: 1.0)</option>
+          <option value="fast">Fast (score multiplier: 1.5)</option>
+        </select>
+      </div>
+
       <div id="userInputContainer">
         <h3> Your final score is: <h3>
           <h1></h1>
         <input id="nameInput" value="" placeholder="enter your name here">
         <button id="nameInputButton">Submit</button>
+        <button class="mainMenuButton">Main Menu</button>
       </div>
 
-      <canvas id="gameCanvas" width="300" height="300"><canvas>
+      <div id="gameWinner">
+        <h3></h3>
+        <button onclick="mainMenuButtonPressed()"class="mainMenuButton">Main Menu</button>
+      </div>
+
+        <canvas id="gameCanvas" width="300" height="300"><canvas>
     </div>
+
 
     <style>
 
+    #getReady {
+      display: none;
+      margin: auto;
+    }
+
+    #speedView {
+      font-size: 20px;
+      font-family: 'Play', sans-serif;
+    }
 
       #icon {
         position: fixed;
@@ -54,6 +95,15 @@
         margin-left: -220px;
         margin-top: -10px;
         -webkit-animation: rotation 2s infinite linear;
+        -webkit-transition: width 2s; /* Safari */
+        transition: width 2s;
+        -webkit-transition: height 2s; /* Safari */
+        transition: height 2s;
+      }
+
+      #icon:hover {
+        width: 1000px;
+        height: 1000px;
       }
 
       #logoText {
@@ -61,6 +111,13 @@
         left: 55%;
         margin-left: -160px;
         margin-top: 25px;
+        transition: 1s;
+      }
+
+      #logoText:hover .show-off {
+        transform: rotate(0);
+        left: 560px;
+        top: -445px;
       }
 
       @-webkit-keyframes rotation {
@@ -80,6 +137,11 @@
         display: none;
       }
 
+      #gameWinner {
+        display: none;
+        font-size: 30px;
+      }
+
       #highScoreContainer {
         display: block;
         text-align: center;
@@ -92,8 +154,6 @@
         width: 400px;
       }
 
-      /* tr,td {text-align:left;} */
-
       #gameCanvas {
         display: none;
         position: absolute;
@@ -102,17 +162,36 @@
         width: 400px;
         height: 400px;
         transform: translate(-50%, -50%);
+        box-shadow: 10px 5px 5px black;
       }
 
-      #scoreContainer {
+      /* #scores {
+        position: relative;
+        width: 450px;
+        height: 240px;
+        padding: 10px;
+        display: none;
+      }
+
+      #scores > div{
+        float: right;
+        margin: 10px;
+      } */
+
+      #scores {
         display: none;
         text-align: center;
+        /* margin: 300px; */
         margin-left: -500px;
         margin-top: 280px;
-
         font-size: 20px;
         font-family: 'Play', sans-serif;
+        /* width: 200px;
+        height: 200px; */
       }
+
+
+
 
 
       #gameContainer {
@@ -128,9 +207,10 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        border: 1px solid black;
+
         padding: 25px;
         margin: 25px;
+        box-shadow: 10px 5px 5px black;
       }
 
     </style>
