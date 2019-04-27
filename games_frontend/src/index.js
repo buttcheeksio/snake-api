@@ -180,6 +180,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //////////////////////// END OF SELECT SPEED //////////////////////////
 
+  // function mainMenuButtonPressed() {
+  //   // highScoreContainer.style.display = "block"
+  //   console.log("lol")
+  // }
 //////////////////////// EVENT LISTENER FOR CLICK TO START GAME ///////
 
     function buttonToStartGame() {
@@ -190,7 +194,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         difficultyText.style.display = "none";
         highScoreContainer.style.display = "none"
-        getReady.style.display = "block"
+        getReady.style.display = "flex"
 
         setTimeout( function onTick() {
           getReady.style.display = "none"
@@ -266,6 +270,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
           main2();
           createFood();
+      } else if (event.target.id === "mainMenuButton") {
+        console.log('lol')
       }
     })
   }// end of EVENT LISTENER FOR THE CLICK TO START THE GAME

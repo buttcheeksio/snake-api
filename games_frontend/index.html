@@ -19,7 +19,7 @@
       </div>
     </div>
 
-    <div id="getReady">Get Ready!</div>
+    <h1 id="getReady">Get Ready!</h1>
 
     <div id="enterYourName"></div>
 
@@ -51,12 +51,12 @@
           <h1></h1>
         <input id="nameInput" value="" placeholder="enter your name here">
         <button id="nameInputButton">Submit</button>
-        <button class="mainMenuButton">Main Menu</button>
+        <button id="mainMenuButton">Main Menu</button>
       </div>
 
       <div id="gameWinner">
         <h3></h3>
-        <button onclick="mainMenuButtonPressed()"class="mainMenuButton">Main Menu</button>
+        <button id="mainMenuButton">Main Menu</button>
       </div>
 
         <canvas id="gameCanvas" width="300" height="300"><canvas>
@@ -66,8 +66,9 @@
 
     #getReady {
       display: none;
-      text-align: center;
-      margin: auto;
+      position: fixed;
+      top: 40%;
+      left: 50%;
     }
 
     #speedView {
