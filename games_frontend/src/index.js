@@ -21,8 +21,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const flockyLogo = `https://fontmeme.com/permalink/190123/8a5c9ae5518ede9ae135238333c6e120.png`
 
     const gameContainer = document.querySelector('#gameContainer')
-    // const scoreContainer = document.querySelector('#scoreContainer')
-    // const scoreContainer2 = document.querySelector('#scoreContainer2')
     const highScoreContainer = document.querySelector('#highScoreContainer')
     const userInputContainer = document.querySelector('#userInputContainer')
     const scoresContainer = document.querySelector('#scores')
@@ -62,7 +60,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 ////////////////////// END OF CONSTANTS ///////////////////////////////
 
-
 ////////////////////// SNAKE LETS /////////////////////////////////////
 
     let snake = [
@@ -99,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 ////////////////////// END OF SNAKE LETS //////////////////////////////
 
-
 ////////////////////// INITIAL GAME FETCH /////////////////////////////
 
     allGames = []
@@ -117,7 +113,6 @@ document.addEventListener('DOMContentLoaded', function() {
       }) // end of the fetch(gamesURL)
 
 ////////////////////// END OF INITIAL GAME FETCH //////////////////////
-
 
 ///////////////////// RENDER //////////////////////////////////////////
 
@@ -141,7 +136,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 ///////////////////// END OF RENDER ///////////////////////////////////
 
-
 ////////////////////////// WEATHER FETCH //////////////////////////////
 
     //WEATHER API Call
@@ -160,7 +154,6 @@ document.addEventListener('DOMContentLoaded', function() {
       })
 
 ///////////////////////// END OF WEATHER FETCH //////////////////////
-
 
 //////////////////////// SELECT SPEED /////////////////////////////////
 
@@ -187,7 +180,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //////////////////////// END OF SELECT SPEED //////////////////////////
 
-
 //////////////////////// EVENT LISTENER FOR CLICK TO START GAME ///////
 
     function buttonToStartGame() {
@@ -196,11 +188,9 @@ document.addEventListener('DOMContentLoaded', function() {
       ///////////////// IF PLAYER CHOOSES ONE PLAYER GAME ////////////
       if (event.target.id === "startGame") {
 
-        // FIX THIS TO SHOW "GET READY!" INSTEAD OF BUTTONS
         difficultyText.style.display = "none";
         highScoreContainer.style.display = "none"
         getReady.style.display = "block"
-
 
         setTimeout( function onTick() {
           getReady.style.display = "none"
@@ -231,7 +221,6 @@ document.addEventListener('DOMContentLoaded', function() {
             main();
             createFood();
         }, 3000) // end of setTimeout
-
 
       //////////// IF PLAYER CHOOSES TWO PLAYER GAME //////////////////
       } else if (event.target.id === "startGame2") {
@@ -284,7 +273,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //////////////////// END OF EVENT LISTENER FOR CLICK TO START GAME ////
 
-
 ////////////////// EVENT LISTENER FOR CLICK TO SUBMIT TO LEADERBOARD ///
 
   userInputContainer.addEventListener('click', (event) => {
@@ -325,14 +313,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 ///////////// END EVENT LISTENER FOR CLICK TO SUBMIT TO LEADERBOARD ///
 
-
 //////////////////////////// MAIN /////////////////////////////////////
 
     /**
      * Main function of the game
      * called repeatedly to advance the game
      */
-
     function main() {
       // If the game ended return early to stop game
       if (didGameEnd()) {
@@ -365,7 +351,6 @@ document.addEventListener('DOMContentLoaded', function() {
      * Main function of the two-player game
      * called repeatedly to advance the game
      */
-
     function main2() {
       // If the game ended return early to stop game
       if (didGameEnd2()) {
@@ -377,7 +362,6 @@ document.addEventListener('DOMContentLoaded', function() {
         difficultyText.style.display = "none"
         gameWinner.innerText = winner
         gameWinnerContainer.style.display = "block"
-
 
         gameplayMusic.stop();
         gameOverSound.play();
@@ -401,7 +385,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /////////////////////////// END OF MAIN ///////////////////////////////
 
-
 ////////////////////////// clearCanvas ////////////////////////////////
 
     /**
@@ -414,7 +397,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 ////////////////////////// END OF clearCanvas /////////////////////////
-
 
 //////////////////////// advanceSnake /////////////////////////////////
 
@@ -463,10 +445,6 @@ document.addEventListener('DOMContentLoaded', function() {
         score2 += (10 * pointsMultiplier);
         // Display score on screen
 
-        // scoreContainer2.innerHTML = `
-        // <b><p><u>Player Two Score</u></p>
-        // <p>${score2}</p></b>
-        // `
         // Generate new food location
         createFood();
       } else {
@@ -477,14 +455,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
 //////////////////////// END OF advanceSnake //////////////////////////
 
-
 /////////////////////// didGameEnd() //////////////////////////////////
 
-/**
- * Returns true if the head of the snake touched another part of the game
- * or any of the walls
- */
-
+  /**
+   * Returns true if the head of the snake touched another part of the game
+   * or any of the walls
+   */
    function didGameEnd() {
      for (let i = 4; i < snake.length; i++) {
        if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
@@ -557,7 +533,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 /////////////////////// END OF didGameEnd() ///////////////////////////
 
-
 /////////////////////// FOOD //////////////////////////////////////////
 
     /**
@@ -593,7 +568,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 /////////////////////////// END OF FOOD ///////////////////////////////
-
 
 ////////////////////////// DRAW SNAKE /////////////////////////////////
 
@@ -635,7 +609,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 ////////////////////////// END OF DRAW SNAKE //////////////////////////
-
 
 ///////////////////////// MOVEMENT ////////////////////////////////////
 
@@ -732,9 +705,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 ///////////////////////// END OF MOVEMENT /////////////////////////////
 
-
-
-
 ////////////////////////// SOUNDS /////////////////////////////////////
 
   // new object constructor to handle sound objects
@@ -757,7 +727,4 @@ document.addEventListener('DOMContentLoaded', function() {
   gameOverSound = new sound(gameOverSoundPath);
 
 ////////////////////////// END OF SOUNDS //////////////////////////////
-
-
-
 }) // end of DOMContentLoaded
