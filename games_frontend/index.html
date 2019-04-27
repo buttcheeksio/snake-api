@@ -12,21 +12,12 @@
     <img id="duck2" src='/Users/johnmartinez/dev/js/api-test/snake-api/app/images/rubberDuckPlainPNG.png' height=0 width=0>
     <img id="foodDuck" src='/Users/johnmartinez/dev/js/api-test/snake-api/app/images/rubberDuckPlainPink.png' height=0 width=0>
 
-
     <div id="scores">
       <div id="scoreContainer" class="left">
         <b><p><u>Score</u></p>
         <p>0</p></b>
       </div>
-      <!-- <div id="scoreContainer2" class="right">
-        <b><p><u>Player 2 Score</u></p>
-        <p>0</p></b> -->
-      <!-- </div> -->
     </div>
-
-    <!-- <div id="speedView">
-      Current Speed: Normal (score multiplier: 1.0)
-    </div> -->
 
     <div id="getReady">Get Ready!</div>
 
@@ -46,11 +37,6 @@
         <button id="startGame2">2 Player Game</button>
       </div>
 
-      <!-- <div id="difficulty">
-        <button id="slow">Slow</button>
-        <button id="normal">Normal</button>
-        <button id="fast">Fast</button>
-      </div> -->
       <div id="difficulty-text">
         <b>Difficulty Level:</b>
         <select id="difficulty">
@@ -76,11 +62,11 @@
         <canvas id="gameCanvas" width="300" height="300"><canvas>
     </div>
 
-
     <style>
 
     #getReady {
       display: none;
+      position: center;
       margin: auto;
     }
 
@@ -165,34 +151,14 @@
         box-shadow: 10px 5px 5px black;
       }
 
-      /* #scores {
-        position: relative;
-        width: 450px;
-        height: 240px;
-        padding: 10px;
-        display: none;
-      }
-
-      #scores > div{
-        float: right;
-        margin: 10px;
-      } */
-
       #scores {
         display: none;
         text-align: center;
-        /* margin: 300px; */
         margin-left: -500px;
         margin-top: 280px;
         font-size: 20px;
         font-family: 'Play', sans-serif;
-        /* width: 200px;
-        height: 200px; */
       }
-
-
-
-
 
       #gameContainer {
         font-family: 'Play', sans-serif;
@@ -201,8 +167,6 @@
         margin-right: auto;
         background-color: lightgrey;
         opacity: 0.8;
-        /* width: 450px;
-        height: 380px; */
         position: absolute;
         top: 50%;
         left: 50%;
