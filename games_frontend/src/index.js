@@ -262,7 +262,6 @@ document.addEventListener('DOMContentLoaded', function() {
         dx2 = -10;
         dy2 = 0;
 
-        // gamesList.style.display = "block"
         highScoreContainer.style.display = "none"
         userInputContainer.style.display = "none"
         gameCanvas.style.display = "block"
@@ -271,7 +270,10 @@ document.addEventListener('DOMContentLoaded', function() {
           main2();
           createFood();
       } else if (event.target.id === "mainMenuButton") {
-        console.log('lol')
+        difficultyText.style.display = "block";
+        highScoreContainer.style.display = "block"
+        userInputContainer.style.display = "none"
+        gameWinnerContainer.style.display = "none"
       }
     })
   }// end of EVENT LISTENER FOR THE CLICK TO START THE GAME
@@ -332,7 +334,6 @@ document.addEventListener('DOMContentLoaded', function() {
         difficultyText.style.display = "none"
         gameCanvas.style.display = "none"
         scoresContainer.style.display = "none"
-        // scoreContainer2.style.display = "none"
         userInputContainer.style.display = "block"
         finalScore.innerText = score
 
@@ -363,7 +364,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         gameCanvas.style.display = "none"
         scoresContainer.style.display = "none"
-        // scoreContainer2.style.display = "none"
         userInputContainer.style.display = "none"
         difficultyText.style.display = "none"
         gameWinner.innerText = winner
