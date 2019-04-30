@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const hazeyURL = 'https://wallpaperplay.com/walls/full/1/8/6/215620.jpg'
     const snowURL = `https://cdn.pixabay.com/photo/2016/03/12/23/25/landscape-1253032_960_720.jpg`
     const rainySky = '/Users/johnmartinez/dev/js/api-test/snake-api/app/images/rainySky.png'
+    const clearSky = 'https://www.ccvlive.com/wp-content/uploads/2018/06/blue-sky-blur-clear-sky-281260.jpg'
 
     const rubberDuckWithSunglass = `https://art.pixilart.com/ca050e04650ceaf.png`
     const rubberDuckWithBow = `https://art.pixilart.com/b365c1e88ecf6ca.png`
@@ -150,6 +151,8 @@ document.addEventListener('DOMContentLoaded', function() {
             document.body.style.backgroundImage = `url(${hazeyURL})`
         } else if (obj.weather[0].main === 'Rain') {
             document.body.style.backgroundImage = `url(${rainySky})`
+        } else if (obj.weather[0].main === 'Clear') {
+            document.body.style.backgroundImage = `url(${clearSky})`
         }
       })
 
